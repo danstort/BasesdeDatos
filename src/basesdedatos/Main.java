@@ -3,9 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package basesdedatos;
+
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.ResultSet;
+
 /**
  *
  * @author danie
@@ -23,14 +27,33 @@ public class Main {
         String user = "programacion";
         String password = "programacion";
         //1. conexión
+        Statement st=null;
+        ResultSet rs = null;
         try {
             cn = DriverManager.getConnection(url, user, password);
-            System.out.println("Conectado");
-        } catch (SQLException ex) {
+            st = cn.createStatement();
+            rs = st.executeQuery("SELECT * FROM usuarios");
+
+            while (rs.next()) {
+                System.out.println("NIF: " + rs.getString
+        (1) + " Nombre: " + rs.getString("nombre") + " Apellidos: " + rs.getString("apellidos"));
+            }
+            }catch (SQLException ex) {
             ex.printStackTrace();
             System.out.println("Error de conexión " + ex);
+        } finally{
+        
+            try{
+            rs.close();
+            st.close();
+            cn.close();
+            } catch(SQLException ex){
+                System.out.println("Error al cerrar servicios");
+            }
+            
+            
+        }
+
         }
 
     }
-
-}
